@@ -80,7 +80,7 @@ observation = env.reset()
 rollout = [observation.copy()]
 
 total_reward = 0
-for t in range(args.max_episode_length):
+for t in range(10):
 
     if t % 10 == 0: print(args.savepath, flush=True)
 
