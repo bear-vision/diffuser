@@ -27,14 +27,19 @@ dataset_config = utils.Config(
     max_path_length=args.max_path_length,
 )
 
-render_config = utils.Config(
-    args.renderer,
-    savepath=(args.savepath, 'render_config.pkl'),
-    env=args.dataset,
-)
+# render_config = utils.Config(
+#     args.renderer,
+#     savepath=(args.savepath, 'render_config.pkl'),
+#     env=args.dataset,
+# )
 
 dataset = dataset_config()
-renderer = render_config()
+print("\nHI!\n")
+print(len(dataset))
+
+# breakpoint()  # Code execution will stop here for debugging
+
+# renderer = render_config()
 
 observation_dim = dataset.observation_dim
 action_dim = dataset.action_dim
@@ -96,7 +101,9 @@ model = model_config()
 
 diffusion = diffusion_config(model)
 
-trainer = trainer_config(diffusion, dataset, renderer)
+# trainer = trainer_config(diffusion, dataset, renderer)
+trainer = trainer_config(diffusion, dataset)
+
 
 
 #-----------------------------------------------------------------------------#
@@ -116,9 +123,14 @@ print('✓')
 #--------------------------------- main loop ---------------------------------#
 #-----------------------------------------------------------------------------#
 
-n_epochs = int(args.n_train_steps // args.n_steps_per_epoch)
+# n_epochs = int(args.n_train_steps // args.n_steps_per_epoch)
+
+# for i in range(n_epochs):
+#     print(f'Epoch {i} / {n_epochs} | {args.savepath}')
+#     trainer.train(n_train_steps=args.n_steps_per_epoch)
+
+n_epochs = 30
 
 for i in range(n_epochs):
     print(f'Epoch {i} / {n_epochs} | {args.savepath}')
-    trainer.train(n_train_steps=args.n_steps_per_epoch)
-
+    trainer.train(n_train_steps=10)

@@ -37,6 +37,7 @@ class Config(collections.abc.Mapping):
             print(f'[ utils/config ] Saved config to: {savepath}\n')
 
     def __repr__(self):
+        print("in UTILS CONFIG\n")
         string = f'\n[utils/config ] Config: {self._class}\n'
         for key in sorted(self._dict.keys()):
             val = self._dict[key]

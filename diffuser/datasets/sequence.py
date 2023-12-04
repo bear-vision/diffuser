@@ -18,19 +18,27 @@ class SequenceDataset(torch.utils.data.Dataset):
     def __init__(self, env='hopper-medium-replay', horizon=64,
         normalizer='LimitsNormalizer', preprocess_fns=[], max_path_length=1000,
         max_n_episodes=10000, termination_penalty=0, use_padding=True, seed=None):
+
+        print("\nIN DATASETS/SEQUENCE \n")
         self.preprocess_fn = get_preprocess_fn(preprocess_fns, env)
         self.env = env = load_environment(env)
+        print("\nPrinting env: ", env)
+        print("\nfinished Printing env: ")
         self.env.seed(seed)
         self.horizon = horizon
         self.max_path_length = max_path_length
         self.use_padding = use_padding
+        print("\n AAAA: ")
         itr = sequence_dataset(env, self.preprocess_fn)
-
+        print("\n BBB: ")
         fields = ReplayBuffer(max_n_episodes, max_path_length, termination_penalty)
+        print("\n CCC: ")
         for i, episode in enumerate(itr):
             fields.add_path(episode)
         fields.finalize()
+        print("\n DDD: ")
 
+        
         self.normalizer = DatasetNormalizer(fields, normalizer, path_lengths=fields['path_lengths'])
         self.indices = self.make_indices(fields.path_lengths, horizon)
 
@@ -42,6 +50,7 @@ class SequenceDataset(torch.utils.data.Dataset):
         self.normalize()
 
         print(fields)
+        print("\n make it here: ")
         # shapes = {key: val.shape for key, val in self.fields.items()}
         # print(f'[ datasets/mujoco ] Dataset fields: {shapes}')
 
