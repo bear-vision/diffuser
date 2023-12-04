@@ -19,16 +19,18 @@ args = Parser().parse_args('plan')
 #---------------------------------- loading ----------------------------------#
 #-----------------------------------------------------------------------------#
 
+print("\nAAA\n")
 ## load diffusion model and value function from disk
 diffusion_experiment = utils.load_diffusion(
     args.loadbase, args.dataset, args.diffusion_loadpath,
     epoch=args.diffusion_epoch, seed=args.seed,
 )
+print("\nBBB\n")
 value_experiment = utils.load_diffusion(
     args.loadbase, args.dataset, args.value_loadpath,
     epoch=args.value_epoch, seed=args.seed,
 )
-
+print("\nCCC\n")
 ## ensure that the diffusion model and value function are compatible with each other
 utils.check_compatibility(diffusion_experiment, value_experiment)
 
