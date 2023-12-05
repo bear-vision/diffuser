@@ -1,3 +1,32 @@
+**START: Update**
+
+1. First activate/create Conda env
+
+```
+conda env create -f environment.yml 
+conda activate diffuser
+pip install -e .
+```
+
+2. Move any new HDF5 dataset file into the folder 'data_hold'
+
+3. To train for 30 epochs, where HDF5_NAME is name of .h5 file 
+
+```
+python scripts/train.py --dataset OUR_CUSTOM_NAME
+```
+
+4. To train with normalization (recommended), cmdF NORMALIZE in datasets/sequence.py, and follow comment/uncomment instructions across ~5 lines of code. 
+
+5. To update the code to unpack the HDF5 file, update get_h5_data() in datasets/d4rl.py
+
+6. To train fully, uncomment/comment per instrcutions in the 'main loop', currently below line 122, of scripts/train.py
+
+**END: Update**
+
+
+
+
 # Planning with Diffusion &nbsp;&nbsp; [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1YajKhu-CUIGBJeQPehjVPJcK_b38a8Nc?usp=sharing)
 
 
