@@ -58,10 +58,14 @@ class ReplayBuffer:
         assert key not in self._dict
         dim = array.shape[-1]
         shape = (self.max_n_episodes, self.max_path_length, dim)
+        print(f'\nallocated key with shape {shape}\n')
         self._dict[key] = np.zeros(shape, dtype=np.float32)
         # print(f'[ utils/mujoco ] Allocated {key} with size {shape}')
 
+
     def add_path(self, path):
+        
+        # print("ADDING PATH")
         path_length = len(path['observations'])
         assert path_length <= self.max_path_length
 
@@ -71,6 +75,7 @@ class ReplayBuffer:
         ## add tracked keys in path
         for key in self.keys:
             array = atleast_2d(path[key])
+            assert len(array) <= self.max_path_length
             if key not in self._dict: self._allocate(key, array)
             self._dict[key][self._count, :path_length] = array
 

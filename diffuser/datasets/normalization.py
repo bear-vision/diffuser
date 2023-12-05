@@ -143,9 +143,11 @@ class GaussianNormalizer(Normalizer):
         )
 
     def normalize(self, x):
-        return (x - self.means) / self.stds
+        stds = np.where(self.stds == 0, 1e-8, self.stds)
+        return (x - self.means) / stds
 
     def unnormalize(self, x):
+        stds = np.where(self.stds == 0, 1e-8, self.stds)
         return x * self.stds + self.means
 
 

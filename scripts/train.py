@@ -27,6 +27,7 @@ dataset_config = utils.Config(
     max_path_length=args.max_path_length,
 )
 
+# COMMENTED OUT FROM MAIN CODE
 # render_config = utils.Config(
 #     args.renderer,
 #     savepath=(args.savepath, 'render_config.pkl'),
@@ -34,11 +35,8 @@ dataset_config = utils.Config(
 # )
 
 dataset = dataset_config()
-print("\nHI!\n")
-print(len(dataset))
 
-# breakpoint()  # Code execution will stop here for debugging
-
+# COMMENTED OUT FROM MAIN CODE
 # renderer = render_config()
 
 observation_dim = dataset.observation_dim
@@ -101,6 +99,7 @@ model = model_config()
 
 diffusion = diffusion_config(model)
 
+# COMMENTED OUT FROM MAIN CODE
 # trainer = trainer_config(diffusion, dataset, renderer)
 trainer = trainer_config(diffusion, dataset)
 
@@ -123,14 +122,20 @@ print('✓')
 #--------------------------------- main loop ---------------------------------#
 #-----------------------------------------------------------------------------#
 
+
+# BEAR: 1. UNCOMMENT THIS FOR COMPLETE TRAINING RUNS
 # n_epochs = int(args.n_train_steps // args.n_steps_per_epoch)
 
 # for i in range(n_epochs):
 #     print(f'Epoch {i} / {n_epochs} | {args.savepath}')
 #     trainer.train(n_train_steps=args.n_steps_per_epoch)
 
+
+# BEAR: 2. COMMENT THIS WHEN YOU UNCOMMENT (1) ABOVE
 n_epochs = 30
 
 for i in range(n_epochs):
     print(f'Epoch {i} / {n_epochs} | {args.savepath}')
     trainer.train(n_train_steps=10)
+
+

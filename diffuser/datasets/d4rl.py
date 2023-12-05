@@ -3,10 +3,13 @@ import collections
 import numpy as np
 import gym
 import pdb
+import os
 
 # HOLD ADDED
 from gym import spaces
 import numpy as np
+import h5py
+
 
 
 
@@ -34,8 +37,6 @@ with suppress_output():
 #-------------------------------- general api --------------------------------#
 #-----------------------------------------------------------------------------#
 
-
-### HOLD ENTER ##
 
 class CustomOfflineEnv(gym.Env):
     def __init__(self, dataset):
@@ -73,12 +74,12 @@ class CustomOfflineEnv(gym.Env):
         return self.dataset
 
 
-### HOLD ENTER END ##
 
 
-# MANUALLY LOAD INTO THIS A CUSTOM ENV. 
-def load_environment(name):
-    print("\n IN LOAD ENV FUNC\n")
+def load_environment(data_name):
+
+    # ORIGINAL FUNCTION
+    # name = data_name
     # if type(name) != str:
     #     ## name is already an environment
     #     return name
@@ -88,50 +89,60 @@ def load_environment(name):
     # env.max_episode_steps = wrapped_env._max_episode_steps
     # env.name = name
 
-    # print("\n GETTING RAW DATA \n")
-    # dataset = env.get_dataset()
-    # for key in dataset:
-    #     print(key)
+    converted_data = get_h5_data(data_name)
+    env = CustomOfflineEnv(converted_data)
+    max_episode_steps = calculate_max_episode_steps(converted_data)
+    env.max_episode_steps = max_episode_steps
+    env.name = "{}".format(data_name)
 
-    # print(dataset['actions'][0])
-    # print(dataset['observations'][0])
-    # print(dataset['rewards'][0])
-    # print(dataset['terminals'][0])
-    # print(dataset['timeouts'][0])
-
-
-    # return env
-
-    example_dataset = {
-        "actions": np.array([
-            [0.37950972, 0.31123734, 0.513988, -0.39653406, -0.9828435, -0.20149498, 0.07471082, 0.00157693],
-            [-0.241601, 0.147251, 0.423663, -0.312456, 0.786238, -0.564823, 0.142536, -0.215643],
-            [0.563462, -0.751246, 0.324576, 0.245356, -0.423567, 0.658735, -0.357845, 0.264573],
-            [-0.456378, 0.342578, -0.785642, 0.523874, 0.357843, -0.246357, 0.753824, -0.546372],
-            [0.745673, -0.564832, 0.258369, -0.357924, 0.468753, 0.357924, -0.478562, 0.246375]
-        ]),
-        "observations": np.array([
-            [0.78418016, 0.99882466, 0.04459167, -0.01844125, 0.00456757, 0.00768615, 0.04628626, -0.09184544],
-            [-0.156372, 0.246357, -0.357842, 0.468752, -0.578643, 0.684753, -0.785634, 0.834756],
-            [0.935674, -0.846375, 0.756476, -0.675487, 0.584698, -0.493509, 0.412421, -0.321332],
-            [-0.230443, 0.341556, -0.452668, 0.563781, -0.674893, 0.786006, -0.897118, 0.908231],
-            [0.019245, -0.128367, 0.237489, -0.346611, 0.455733, -0.564855, 0.673977, -0.783099]
-        ]),
-        "rewards": np.array([0.22460805, -0.356472, 0.478563, -0.592645, 0.716728]),
-        "terminals": np.array([False, False, True, False, True]),
-        "timeouts": np.array([False, True, False, True, False])
-    }
-
-    env = CustomOfflineEnv(example_dataset)
-    env.max_episode_steps = 1000
-    env.name = "CUSTOM"
     return env
 
 
+def truncate_arrays(arrays):
+    return [arr[:10] for arr in arrays]
+
+
+def get_h5_data(filename):
+    """
+    Load the contents of an HDF5 file into a dictionary.
+
+    :param filename: Path to the HDF5 file
+    :return: Dictionary with dataset names as keys and dataset contents as values
+    """
+
+    filename = os.path.expanduser('~/diffuser/data_hold/{}.h5'.format(filename))
+
+    data_dict = {}
+    with h5py.File(filename, 'r') as file:
+        for name in file:
+            data_dict[name] = file[name][()]
+    return data_dict
+
+
+def calculate_max_episode_steps(env_data):
+    terminals = env_data["terminals"]
+    timeouts = env_data["timeouts"]
+
+    episode_lengths = []
+    episode_length = 0
+
+    for terminal, timeout in zip(terminals, timeouts):
+        episode_length += 1
+        if terminal or timeout:
+            episode_lengths.append(episode_length)
+            episode_length = 0
+
+    # Add last episode if it doesn't end with a terminal or timeout
+    if episode_length > 0:
+        episode_lengths.append(episode_length)
+
+    if episode_lengths:
+        return np.max(episode_lengths)
+    else:
+        return 0
 
 
 def get_dataset(env):
-    print("\n IN GETDATESET\n")
     dataset = env.get_dataset()
 
     if 'antmaze' in str(env).lower():
