@@ -1,5 +1,5 @@
 import socket
-
+import os
 from diffuser.utils import watch
 
 #------------------------ base ------------------------#
@@ -15,7 +15,7 @@ args_to_watch = [
     ('discount', 'd'),
 ]
 
-logbase = 'logs'
+logbase = os.path.expanduser('~/Projects/.ocean/diffuser/logs')
 
 base = {
     'diffusion': {
@@ -86,7 +86,7 @@ base = {
 
         ## serialization
         'logbase': logbase,
-        'prefix': 'values/defaults',
+        'prefix': '/defaults',
         'exp_name': watch(args_to_watch),
 
         ## training

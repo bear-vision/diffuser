@@ -110,7 +110,7 @@ def get_h5_data(filename):
     :return: Dictionary with dataset names as keys and dataset contents as values
     """
 
-    filename = os.path.expanduser('~/diffuser/data_hold/{}.h5'.format(filename))
+    filename = os.path.expanduser('~/Projects/.ocean/diffuser/data_hold/{}.h5'.format(filename))
 
     data_dict = {}
     with h5py.File(filename, 'r') as file:
