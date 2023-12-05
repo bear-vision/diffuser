@@ -13,14 +13,14 @@ pip install -e .
 3. To train for 30 epochs, where HDF5_NAME is name of .h5 file 
 
 ```
-python scripts/train.py --dataset OUR_CUSTOM_NAME
+python scripts/train.py --dataset HDF5_NAME
 ```
 
 4. To train with normalization (recommended), cmdF NORMALIZE in datasets/sequence.py, and follow comment/uncomment instructions across ~5 lines of code. 
 
 5. To update the code to unpack the HDF5 file, update get_h5_data() in datasets/d4rl.py
 
-6. To train fully, uncomment/comment per instrcutions in the 'main loop', currently below line 122, of scripts/train.py
+6. To train fully, uncomment/comment per unstructions in the 'main loop', currently below line 122, of scripts/train.py
 
 **END: Update**
 
