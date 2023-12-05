@@ -36,20 +36,20 @@ utils.check_compatibility(diffusion_experiment, value_experiment)
 
 diffusion = diffusion_experiment.ema
 dataset = diffusion_experiment.dataset
-renderer = diffusion_experiment.renderer
+# renderer = diffusion_experiment.renderer
 
 ## initialize value guide
 value_function = value_experiment.ema
 guide_config = utils.Config(args.guide, model=value_function, verbose=False)
 guide = guide_config()
 
-logger_config = utils.Config(
-    utils.Logger,
-    renderer=renderer,
-    logpath=args.savepath,
-    vis_freq=args.vis_freq,
-    max_render=args.max_render,
-)
+# logger_config = utils.Config(
+#    utils.Logger,
+#    renderer=renderer,
+#    logpath=args.savepath,
+#    vis_freq=args.vis_freq,
+#    max_render=args.max_render,
+#)
 
 ## policies are wrappers around an unconditional diffusion model and a value guide
 policy_config = utils.Config(
@@ -67,7 +67,7 @@ policy_config = utils.Config(
     verbose=False,
 )
 
-logger = logger_config()
+#logger = logger_config()
 policy = policy_config()
 
 
@@ -109,7 +109,7 @@ for t in range(10):
     rollout.append(next_observation.copy())
 
     ## render every `args.vis_freq` steps
-    logger.log(t, samples, state, rollout)
+    # logger.log(t, samples, state, rollout)
 
     if terminal:
         break
