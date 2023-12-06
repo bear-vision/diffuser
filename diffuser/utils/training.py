@@ -51,6 +51,7 @@ class Trainer(object):
         save_parallel=False,
         results_folder='./results',
         n_reference=8,
+        n_samples=2,
         bucket=None,
     ):
         super().__init__()
@@ -82,6 +83,7 @@ class Trainer(object):
         self.logdir = results_folder
         self.bucket = bucket
         self.n_reference = n_reference
+        self.n_samples = n_samples
 
         self.reset_parameters()
         self.step = 0
